@@ -1,0 +1,70 @@
+Salesforce Management system
+
+#Apex class
+public class Employee1 {
+    public Employee__c c{
+        get; set;
+    }
+    
+    public List<Employee__c> employees{
+        get; set;
+    }
+    
+    public Employee1(){
+        c = new Employee__c();
+    }
+    
+    public PageReference save(){
+        insert c;
+        employees = [SELECT EmpId_c, Name, Salaryc FROM Employee_c];
+        return null;
+    }
+    
+    public PageReference delete1(){
+        delete[SELECT EmpId_c FROM Employeec WHERE EmpIdc=:c.EmpId_c];
+        employees = [SELECT EmpId_c, Name, Salaryc FROM Employee_c];
+        return null;
+    }
+    
+    public PageReference update1(){
+        List<Employee_c> emps = [SELECT Name, Salaryc FROM Employeec WHERE EmpIdc=:c.EmpId_c limit 1];
+        if(!emps.isEmpty()){
+            Employee__c emp = emps[0];
+            emp.Name = c.Name;
+            emp.Salary_c = c.Salary_c;
+            update emp;
+        }
+        employees = [SELECT EmpId_c, Name, Salaryc FROM Employee_c];
+        return null;
+    }
+}
+
+# visual force page
+
+<apex:page controller="Employee1">
+    <apex:form>
+    	<apex:pageBlock title="Employee Management System">
+        	<apex:pageBlockSection columns="1">
+            	<apex:inputField value="{!c.EmpId__c}"/>
+                <apex:inputField value="{!c.Name}"/>
+                <apex:inputField value="{!c.Salary__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons>
+            	<apex:commandButton action="{!save}" value="Save"/>
+                <apex:commandButton action="{!delete1}" value="Delete"/>
+                <apex:commandButton action="{!update1}" value="Update"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockTable value="{!employees}" var="c">
+                <apex:column headerValue="Employee ID">
+                	<apex:outputField value="{!c.EmpId__c}"/>
+                </apex:column>
+                <apex:column headerValue="Employee Name">
+                	<apex:outputField value="{!c.Name}"/>
+                </apex:column>
+                <apex:column headerValue="Salary">
+                	<apex:outputField value="{!c.Salary__c}"/>
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>
