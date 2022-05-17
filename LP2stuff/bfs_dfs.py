@@ -1,79 +1,114 @@
-graph = {
-  '1' : ['2','3'],
-  '2' : ['4', '5'],
-  '3' : ['6'],
-  '4' : [],
-  '5' : ['6'],
-  '6' : []
-}
+Assignment 1
+Implement Depth First Search algorithm and Breadth First Search algorithm. Use an undirected graph
+and develop a recursive algorithm for searching all the vertices of a graph or tree data structure.
+'''
 
-visited = []  # List for visited nodes.
-queue = []
-visited2 = set()
+class Node:
+    def __init__(self, i):
+        self.l = None
+        self.r = None
+        self.i = i
 
-def bfs(visited, graph, node):
-  visited.append(node)
-  queue.append(node)
+# -------------------------------------------------------
+    
+class Tree:
+    def __init__(self, rX):
+        self.root = rX
 
-  while queue:          # Creating loop to visit each node
-    m = queue.pop(0)
-    print (m, end = " ")
+    # Get input function
+    def getInput(self):
+        q = [self.root]
+        print("\nEnter data or -1 for no data\n")
+        while q:
+            tmp = q.pop()
+            if(tmp!=None):
+                lC = int(input("Enter left child of {}: ".format(tmp.i)))
+                if lC!=-1:
+                    tmp.l = Node(lC)
+                    q.append(tmp.l)
+                else:
+                    tmp.l=None
 
-    for neighbour in graph[m]:
-      if neighbour not in visited:
-        visited.append(neighbour)
-        queue.append(neighbour)
+                rC = int(input("Enter right child of {}: ".format(tmp.i)))
+                if rC!=-1:
+                    tmp.r = Node(rC)
+                    q.append(tmp.r)
+                else:
+                    tmp.r=None
 
-def dfs(visited2, graph, node):
-    if node not in visited2:
-        print (node, end = " ")
-        visited2.add(node)
-        for neighbour in graph[node]:
-            dfs(visited2, graph, neighbour)
+    # Recursive DFS function
+    def dfs(self, x):
+        print(x.i, end = ' ')
+        if x.l:
+            self.dfs(x.l)
+        if x.r:
+            self.dfs(x.r)
 
-def searchElement(self):
-    element = int(input("Search element: "))
-    start = 1
-    print("Searching: ", end="")
-    found = self.dfs(visited2, start, element)
-    print()
-    for node in self.nodes:
-        node.visited = False
-    if found == True:
-        print("Vertex Found")
-    else:
-        print("Vertex Not Found")
+    # Recursive BFS function
+    def bfs(self, x):
+        queue = []
+        queue.append(x)
 
-while True:
-    print(
-        "\nSelect Choice\n",
-        "1) BFS\n",
-        "2) DFS\n",
-        "3)Exit"
-    )
-    choice = int(input("Enter choice:"))
-    if choice == 1:
-        print("\nBreadth-First Search:")
-        bfs(visited, graph, '1')
-    elif choice == 2:
-        print("\nDepth-First Search:")
-        dfs(visited2, graph, '1')
-    else:
+        while(len(queue)>0):
+            print(queue[0].i, end=' ')
+            tmp = queue.pop(0)
+
+            if tmp.l is not None:
+                queue.append(tmp.l)
+            if tmp.r is not None:
+                queue.append(tmp.r)
+    
+# -------------------------------------------------------
+
+# Menu
+while(True):
+    print("\n------------------------")
+    print("BFS and DFS traversal")
+    print("1. Enter data")
+    print("2. BFS traversal")
+    print("3. DFS traversal")
+    print("4. Exit\n")
+
+    c = int(input("Enter choice: "))
+    if c==1:
+        # Create a tree
+        r = int(input("Enter the root node: "))
+        ROOT = Node(r)
+        t = Tree(ROOT)
+        t.getInput()
+
+    elif c==2:
+        print("\n-- BFS Traversal --")
+        t.bfs(ROOT)
+        print("")
+
+    elif c==3:
+        print("\n-- DFS Traversal --")
+        t.dfs(ROOT)
+        print("")
+
+    elif c==4:
         break
 
-"""
-Graph:
-        1
-       / \
-      2   3
-     / \   \
-    4   5 - 6
+    else:
+        print("Invalid Input")
 
-OUTPUT:
-Breadth-First Search: 
-1 2 3 4 5 6 
+'''
+          20
+        /    \
+       7     23 
+      / \    / \
+     3   8  15  27
 
-Depth-First Search:
-1 2 4 5 6 3 
+    BFS:    20 7 23 3 8 15 27
+    DFS:    20 7 3 8 23 15 27
 
-"""
+          10
+        /    \
+       2     12
+      / \
+     1   3
+
+    BFS:    10 2 12 1 3
+    DFS:    10 2 1 3 12
+'''
